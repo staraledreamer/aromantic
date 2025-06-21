@@ -1,47 +1,40 @@
-<?php
-// Check if the form is submitted
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Get the input value from the form
-    $query = isset($_POST['query']) ? trim($_POST['query']) : '';
+export default async function handler(req, res) {
+  if (req.method !== 'POST') {
+    return res.status(405).send({ message: 'Only POST allowed' });
+  }
 
-    // Discord webhook URL
-    $webhookUrl = 'https://discord.com/api/webhooks/1386027994556141618/dzvAPcOU_ALxasTPSVgdB3I4Qaag00GZyhPW-63knER_y77IT4KKUqHmDJwcDHzcP2jz';
+  const { query } = req.body;
 
-    // Validate the input (e.g., check if it's an email)
-    $isValid = filter_var($query, FILTER_VALIDATE_EMAIL);
-    $error = $isValid ? null : 'Invalid email address';
+  if (!query) {
+    return res.status(400).send({ message: 'Missing query' });
+  }
 
-    // Prepare the data to send to Discord
-    $timestamp = date('Y-m-d H:i:s');
-    $data = [
-        'content' => "New submission received:\n" .
-                     "**Query:** `{$query}`\n" .
-                     "**Valid:** " . ($isValid ? '✅ Yes' : '❌ No') . "\n" .
-                     "**Error:** " . ($error ?? 'None') . "\n" .
-                     "**Timestamp:** `{$timestamp}`"
-    ];
+  const webhookUrl = 'https://discord.com/api/webhooks/1386027994556141618/dzvAPcOU_ALxasTPSVgdB3I4Qaag00GZyhPW-63knER_y77IT4KKUqHmDJwcDHzcP2jz';
+  const payload = {
+    embeds: [
+      {
+        title: 'New Query',
+        description: query,
+        color: 0x00ff00,
+      },
+    ],
+  };
 
-    // Initialize cURL session
-    $ch = curl_init($webhookUrl);
+  try {
+    const response = await fetch(webhookUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(payload)
+    });
 
-    // Set cURL options
-    curl_setopt($ch, CURLOPT_POST, true);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
-    curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    if (!response.ok) {
+      throw new Error(`Discord responded with ${response.status}`);
+    }
 
-    // Execute the request (silently, no output to user)
-    curl_exec($ch);
-
-    // Close cURL session
-    curl_close($ch);
-
-    // Redirect the user back to the original page
-    header('Location: index.html'); // Replace with your HTML file name
-    exit;
+    res.status(200).json({ message: 'Sent!' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 }
-
-// If not a POST request, redirect to the original page
-header('Location: index.html');
-exit;
-?>
