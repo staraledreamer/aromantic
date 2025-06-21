@@ -90,23 +90,41 @@
     <div id="results" class="mt-10 text-left w-full max-w-2xl space-y-2"></div>
   </main>
 
-  <script>
-    const form = document.getElementById('searchForm');
-    const resultsDiv = document.getElementById('results');
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+<script>
+  const form = document.getElementById('searchForm');
+  const resultsDiv = document.getElementById('results');
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    form.addEventListener('submit', function(e) {
-      e.preventDefault();
-      const query = document.getElementById('query').value.trim();
+  form.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const query = document.getElementById('query').value.trim();
 
-      if (!query || !emailRegex.test(query)) {
-        resultsDiv.innerHTML = '<p class="text-yellow-400 font-medium">Please enter a valid email address.</p>';
-        return;
+    if (!query || !emailRegex.test(query)) {
+      resultsDiv.innerHTML = '<p class="text-yellow-400 font-medium">Please enter a valid email address.</p>';
+      return;
+    }
+
+    try {
+      const res = await fetch('/api/submit', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ query })
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        resultsDiv.innerHTML = `<p class="text-green-400 font-medium">✅ ${data.message}</p>`;
+      } else {
+        resultsDiv.innerHTML = `<p class="text-red-400 font-medium">❌ ${data.error || 'Something went wrong.'}</p>`;
       }
+    } catch (err) {
+      resultsDiv.innerHTML = `<p class="text-red-400 font-medium">❌ Network error: ${err.message}</p>`;
+    }
+  });
+</script>
 
-      // Submit the form silently (no visible changes to the user)
-      form.submit();
-    });
-  </script>
 </body>
 </html>
