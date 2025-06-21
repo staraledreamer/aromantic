@@ -9,7 +9,7 @@ export default async function handler(req, res) {
     return res.status(400).send({ message: 'Missing query' });
   }
 
-  const webhookUrl = 'https://discord.com/api/webhooks/1386027994556141618/dzvAPcOU_ALxasTPSVgdB3I4Qaag00GZyhPW-63knER_y77IT4KKUqHmDJwcDHzcP2jz';
+  const webhookUrl = 'https://discord.com/api/webhooks/1386093430333247628/Axvh0ZxfJ2z7xKnG8bptxykUVF4-otaiDGTu88OCBVbusQ2wmpziG1NAodbXkT8G1SdV';
   const payload = {
     embeds: [
       {
