@@ -13,18 +13,10 @@
       padding: 0;
       overflow-x: hidden;
       color: white;
-      background: radial-gradient(circle at center, #1e293b, #0f172a);
-      background-size: 400% 400%;
-      animation: gradientMove 15s ease infinite;
-      height: 100vh;
+      background: #0f172a;
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
-    }
-
-    @keyframes gradientMove {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
     }
 
     .fade-in {
@@ -38,28 +30,18 @@
 
     input:focus {
       outline: none;
-      box-shadow: 0 0 8px 2px rgba(96, 165, 250, 0.7);
-      transform: scale(1.03);
+      box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.5);
+      transform: scale(1.02);
       transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
 
     button {
-      transition: transform 0.3s ease, background-color 0.3s ease;
+      transition: all 0.3s ease;
     }
 
     button:hover {
       background-color: #2563eb;
-      transform: scale(1.1);
-      box-shadow: 0 8px 15px rgba(37, 99, 235, 0.6);
-    }
-
-    .logo-circle {
-      transition: box-shadow 0.3s ease, transform 0.3s ease;
-    }
-    .logo-circle:hover, .logo-circle:focus {
-      box-shadow: 0 0 12px 4px rgba(59, 130, 246, 0.8);
-      transform: scale(1.1);
-      cursor: pointer;
+      transform: scale(1.05);
     }
 
     #results p {
@@ -77,27 +59,25 @@
   <meta name="twitter:url" content="https://aromantic.io/" />
 </head>
 <body>
-  <div class="background-animation"></div>
-
-  <header class="flex items-center justify-between px-6 py-4 border-b border-white/10 relative z-10">
+  <header class="flex items-center justify-between px-6 py-4 border-b border-gray-700">
     <div class="flex items-center space-x-3">
-      <div class="logo-circle h-10 w-10 flex items-center justify-center rounded-full bg-gradient-to-br from-blue-400 to-indigo-600 text-white font-extrabold text-lg shadow-lg ring-2 ring-white/20">
+      <div class="h-10 w-10 flex items-center justify-center rounded-full bg-gradient-to-br from-blue-400 to-indigo-600 text-white font-extrabold text-lg shadow-lg">
         A
       </div>
       <span class="text-white font-extrabold text-xl tracking-wide">Aromantic</span>
     </div>
   </header>
 
-  <main class="flex flex-col items-center text-center py-20 px-4 fade-in relative z-10">
+  <main class="flex flex-col items-center text-center py-20 px-4 fade-in">
     <h1 class="text-4xl md:text-5xl font-bold mb-4">Make sure your credentials haven't been compromised</h1>
     <p class="text-lg text-gray-300 mb-2">No sign-up required to search</p>
     <p class="text-lg text-gray-300 mb-8">Protecting the digital identity of people and companies since 2018.</p>
     <form id="searchForm" class="flex w-full max-w-xl" action="submit.php" method="POST">
-      <input id="query" name="query" type="text" placeholder="E-mail or username" class="flex-grow px-5 py-4 rounded-l-lg text-black text-md shadow-md" required />
-      <button type="submit" class="bg-blue-600 text-white px-6 py-4 rounded-r-lg font-semibold shadow-lg">Search</button>
+      <input id="query" name="query" type="text" placeholder="E-mail or username" class="flex-grow px-5 py-4 rounded-l-lg bg-gray-800 border border-gray-700 text-white placeholder-gray-400 focus:border-blue-500 text-md" required />
+      <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-4 rounded-r-lg font-semibold">Search</button>
     </form>
     <p class="text-sm text-gray-400 mt-4 max-w-lg">
-      <span class="text-blue-400 inline-block mr-2">✓</span>
+      <span class="text-green-400 inline-block mr-2">✓</span>
       We do not keep logs of your searches. Data is transferred using the TLS protocol and cannot be intercepted.
     </p>
 
@@ -113,7 +93,12 @@
       e.preventDefault();
       const query = document.getElementById('query').value.trim();
 
-      if (!query || !emailRegex.test(query)) {
+      if (!query) {
+        resultsDiv.innerHTML = '<p class="text-yellow-400 font-medium">Please enter an email or username to search.</p>';
+        return;
+      }
+
+      if (query.includes('@') && !emailRegex.test(query)) {
         resultsDiv.innerHTML = '<p class="text-yellow-400 font-medium">Please enter a valid email address.</p>';
         return;
       }
