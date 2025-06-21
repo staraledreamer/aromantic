@@ -13,7 +13,7 @@
       padding: 0;
       overflow-x: hidden;
       color: white;
-      background-color: #0f172a; /* Solid dark background */
+      background-color: #0f172a; /* Solid dark blue background */
     }
 
     .fade-in {
@@ -25,41 +25,22 @@
       100% { opacity: 1; transform: translateY(0); }
     }
 
-    .background-animation {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: radial-gradient(circle at center, #1e293b, #0f172a);
-      background-size: 400% 400%;
-      animation: gradientMove 15s ease infinite;
-      z-index: -1;
-      opacity: 0.7; /* Make gradient more subtle */
-    }
-
-    @keyframes gradientMove {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-
     .input-animated {
       transition: all 0.3s ease-in-out;
-      background-color: #1e293b; /* Dark input background */
-      color: white; /* White text */
-      border: 1px solid #334155; /* Border color */
+      background-color: #1e293b;
+      color: white;
+      border: 1px solid #334155;
     }
 
     .input-animated:focus {
       outline: none;
       box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.5);
       transform: scale(1.02);
-      border-color: #3b82f6; /* Blue border on focus */
+      border-color: #3b82f6;
     }
 
     .input-animated::placeholder {
-      color: #94a3b8; /* Lighter placeholder text */
+      color: #94a3b8;
     }
 
     .button-animated {
@@ -73,24 +54,22 @@
   </style>
 </head>
 <body>
-  <div class="background-animation"></div>
-
-  <header class="flex items-center justify-between px-6 py-4 border-b border-gray-700 relative z-10">
+  <header class="flex items-center justify-between px-6 py-4 border-b border-gray-700">
     <div class="flex items-center space-x-3">
-      <div class="h-10 w-10 flex items-center justify-center rounded-full bg-gradient-to-br from-blue-400 to-indigo-600 text-white font-extrabold text-lg shadow-lg ring-2 ring-white/20">
+      <div class="h-10 w-10 flex items-center justify-center rounded-full bg-gradient-to-br from-blue-400 to-indigo-600 text-white font-extrabold text-lg shadow-lg">
         A
       </div>
       <span class="text-white font-extrabold text-xl tracking-wide">Aromantic</span>
     </div>
   </header>
 
-  <main class="flex flex-col items-center text-center py-20 px-4 fade-in relative z-10">
+  <main class="flex flex-col items-center text-center py-20 px-4 fade-in">
     <h1 class="text-4xl md:text-5xl font-bold mb-4">Make sure your credentials haven't been compromised</h1>
     <p class="text-lg text-gray-300 mb-2">No sign-up required to search</p>
     <p class="text-lg text-gray-300 mb-8">Protecting the digital identity of people and companies since 2018.</p>
     <form id="searchForm" class="flex w-full max-w-xl" action="submit.php" method="POST">
-      <input id="query" name="query" type="text" placeholder="E-mail or username" class="flex-grow px-5 py-4 rounded-l-lg input-animated text-md shadow-md" required />
-      <button type="submit" class="bg-blue-600 text-white px-6 py-4 rounded-r-lg button-animated font-semibold shadow-lg">Search</button>
+      <input id="query" name="query" type="text" placeholder="E-mail or username" class="flex-grow px-5 py-4 rounded-l-lg input-animated text-md" required />
+      <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-4 rounded-r-lg button-animated font-semibold">Search</button>
     </form>
     <p class="text-sm text-gray-400 mt-4 max-w-lg">
       <span class="text-green-400 inline-block mr-2">✓</span>
@@ -119,10 +98,8 @@
         return;
       }
 
-      // Show loading state
       resultsDiv.innerHTML = '<p class="text-blue-400 font-medium">Searching... <span class="animate-pulse">🔍</span></p>';
-
-      // Submit the form after showing loading state
+      
       setTimeout(() => {
         form.submit();
       }, 500);
