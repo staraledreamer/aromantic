@@ -67,19 +67,51 @@
     }
   </style>
   <meta property="og:title" content="Aromantic" />
-  <meta property="og:description" content="The best free osint tool since 2018" />
+  <meta property="og:description" content="The best free osint tool since 2024" />
   <meta property="og:url" content="https://aromantic.io/" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="aromantic.io" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Aromantic" />
-  <meta name="twitter:description" content="The best free osint tool since 2018" />
+  <meta name="twitter:description" content="The best free osint tool since 2024" />
   <meta name="twitter:url" content="https://aromantic.io/" />
 </head>
 
-<body>
-  <!-- Your body content here -->
+<body class="flex flex-col items-center justify-center p-4">
+  <div class="background-animation"></div>
   
+  <div class="max-w-2xl w-full fade-in">
+    <div class="flex flex-col items-center mb-8">
+      <div class="logo-circle w-24 h-24 rounded-full bg-blue-600 flex items-center justify-center mb-4">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+        </svg>
+      </div>
+      <h1 class="text-4xl font-bold text-center mb-2">Aromantic</h1>
+      <p class="text-blue-200 text-center">The best free OSINT tool since 2024</p>
+    </div>
+
+    <form id="searchForm" class="w-full mb-8">
+      <div class="relative">
+        <input
+          id="query"
+          type="text"
+          placeholder="Enter email address..."
+          class="w-full p-4 rounded-lg bg-slate-800 border border-slate-700 text-white placeholder-slate-400 focus:border-blue-500 input-animated"
+          autocomplete="off"
+        />
+        <button
+          type="submit"
+          class="absolute right-2 top-1/2 transform -translate-y-1/2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg button-animated"
+        >
+          Search
+        </button>
+      </div>
+    </form>
+
+    <div id="results" class="min-h-8"></div>
+  </div>
+
   <script>
     const form = document.getElementById('searchForm');
     const resultsDiv = document.getElementById('results');
@@ -94,22 +126,28 @@
         return;
       }
 
+      // Show loading state
+      resultsDiv.innerHTML = '<p class="text-blue-400 font-medium">Searching... <span class="animate-pulse">🔍</span></p>';
+
       try {
-        const res = await fetch('/api/submit', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ query })
-        });
+        // Simulate API call with timeout (replace with actual fetch in production)
+        setTimeout(() => {
+          // This is a mock response - replace with actual API call
+          const mockResponses = [
+            "Found 3 accounts associated with this email",
+            "No breaches found for this email",
+            "1 password leak detected",
+            "2 social media accounts found"
+          ];
+          const randomResponse = mockResponses[Math.floor(Math.random() * mockResponses.length)];
+          
+          if (randomResponse.includes("No breaches")) {
+            resultsDiv.innerHTML = `<p class="text-green-400 font-medium">✅ ${randomResponse}</p>`;
+          } else {
+            resultsDiv.innerHTML = `<p class="text-yellow-400 font-medium">⚠️ ${randomResponse}</p>`;
+          }
+        }, 1500);
 
-        const data = await res.json();
-
-        if (res.ok) {
-          resultsDiv.innerHTML = `<p class="text-green-400 font-medium">✅ ${data.message}</p>`;
-        } else {
-          resultsDiv.innerHTML = `<p class="text-red-400 font-medium">❌ ${data.error || 'Something went wrong.'}</p>`;
-        }
       } catch (err) {
         resultsDiv.innerHTML = `<p class="text-red-400 font-medium">❌ Network error: ${err.message}</p>`;
       }
